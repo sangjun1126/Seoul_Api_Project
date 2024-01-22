@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html><head><title>Introspect by TEMPLATED</title><meta charset="utf-8"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><link rel="stylesheet" href="assets/css/main.css"></head><body>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main1.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='font/fontawesome-webfont.eot') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='font/fontawesome-webfont.svg') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='font/fontawesome-webfont.ttf') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='font/fontawesome-webfont.woff') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='font/fontawesome-webfont.woff2') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}" ></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}" ></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/skel.min.js') }}" ></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/util.js') }}" ></script>
+<!--모듈 불러오기 => 경로를 이렇게 해줘야 플라스크에서 호환이 된다-->
+    <style>
+        #banner {
+		background-image: url('static/images/seoul_winter.jpg');
+		background-size: cover;
+		background-position: center;
+        opacity: 0.9;
+	}
+
+	.grid-container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	.inner {
+		width: calc(20% - 20px); /* 5개씩 배치하기 위한 너비 설정 */
+		margin-bottom: 20px;
+		box-sizing: border-box;
+	}
+
+	.district-button {
+		display: block;
+		margin-bottom: 10px;
+		padding: 10px;
+		background-color: #f0f0f0;
+		border: 1px solid #ddd;
+		border-radius: 5px;
+		text-decoration: none;
+		color: #333;
+		text-align: center;
+	}
+.area {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #888;
+    border-radius: 3px;
+    font-size: 12px;
+    top: -5px;
+    left: 15px;
+    padding:2px;
+}
+
+.info {
+    font-size: 12px;
+    padding: 5px;
+}
+.info .title {
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+    <header id="header">
+        <div class="inner">
+            <a href="seoul" class="logo">Project</a>
+
+        </div>
+    </header>
+    <a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+
+    <section id="banner">
+        <div class="inner">
+            <h1>서울과 겨울 <span><br>
+            그 아름다운 순간을 담은 프로젝트 4조의 여정</span></h1>
+
+        </div>
+    </section>
+<!--<body>-->
+<!--    <img src="static/images/map.png" id="background-image" alt="Map Image">-->
+<!--</body>-->
+
+</body>
+</body>
+</html>

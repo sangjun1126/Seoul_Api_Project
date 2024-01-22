@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/login.css')}}">
+
+</head>
+<body>
+   <div class="login-wrap">
+        <div class="login-html">
+            <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">로그인</label>
+            <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
+            <div class="login-form">
+                <div class="sign-in-htm">
+                    <form action="/login" method="post"> <!-- 폼 시작 -->
+                        <div class="group">
+                            <label for="email" class="label">이메일</label>
+                            <input id="email" name="email" type="text" class="input">
+                        </div>
+                        <div class="group">
+                            <label for="password" class="label">비밀번호</label>
+                            <input id="password" name="password" type="password" class="input" data-type="password">
+                        </div>
+                        <div class="group">
+                            <input id="check" name="check" type="checkbox" class="check" checked>
+                            <label for="check"><span class="icon"></span> Keep me Signed in</label>
+                        </div>
+                        <div class="group">
+                            <input type="submit" class="button" value="로그인">
+                        </div>
+
+                    </form> <!-- 폼 종료 -->
+                    <div class="button-container">
+                        <button onclick="registerBack()" class="btn-8"><span>회원가입</span></button>
+                        <button onclick="mainBack()" class="btn-8"><span>홈으로</span></button>
+                        <button onclick="goBack()" class="btn-8"><span>뒤로가기</span></button>
+
+                    </div>
+                    <script>
+                        function registerBack() {
+                            window.location.href = '/register';
+                        }
+
+                        function mainBack() {
+                            window.location.href = '/';
+                        }
+
+                        function goBack() {
+                            window.history.back();
+                        }
+                    </script>
+
+
+    </body>
+</html>

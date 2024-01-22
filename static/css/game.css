@@ -1,0 +1,127 @@
+/* reset */
+* { box-sizing: border-box; }
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,textarea,p,blockquote,th,td,input,select,textarea,button {margin:0;padding:0}
+fieldset,img {border:0 none}
+dl,ul,ol,menu,li {list-style:none}
+blockquote, q {quotes:none}
+blockquote:before, blockquote:after,q:before, q:after {content:'';content:none}
+input,select,textarea,button {font-size:100%;vertical-align:middle}
+button {border:0 none;background-color:transparent;cursor:pointer; outline:none}
+table {border-collapse:collapse;border-spacing:0}
+body {-webkit-text-size-adjust:none; padding:10px}
+input[type='text'],input[type='password'],input[type='submit'],input[type='search'] {-webkit-appearance:none; border-radius:0}
+input:checked[type='checkbox'] {background-color:#666; -webkit-appearance:checkbox}
+button,input[type='button'],input[type='submit'],input[type='reset'],input[type='file'] {-webkit-appearance:button; border-radius:0}
+input[type='search']::-webkit-search-cancel-button {-webkit-appearance:none}
+body,th,td,input,select,textarea,button {font-size:14px;line-height:1.5;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;background-color: #f3f6f7;color:#333}
+a {color:#333;text-decoration:none}
+a:active, a:hover {text-decoration:none}
+address,caption,cite,code,dfn,em,var {font-style:normal;font-weight:normal}
+.soff {display:none;}
+/* content */
+.wrap {max-width:900px;margin:0 auto}
+header {margin-bottom:30px}
+h1 {font-weight:bold;font-size:2rem;line-height:1.4}
+.content {margin-bottom:30px}
+.content.default,
+.content.in_game {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:300px;
+  background-color:#fff;
+  border-radius:10px;
+  -webkit-border-radius:10px;
+}
+.content.in_game {padding: 30px 0}
+#btnGameStart,
+#cancel,
+#prev {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	color: #000000;
+  padding: 8px 20px;
+  margin:0 auto;
+	background: -moz-linear-gradient(
+		top,
+		#ffffff 0%,
+		#5bf079 50%,
+		#47de7c 50%,
+		#19b037 65%,
+		#2f8a21);
+	background: -webkit-gradient(
+		linear, left top, left bottom,
+		from(#ffffff),
+		color-stop(0.50, #5bf079),
+		color-stop(0.50, #47de7c),
+		color-stop(0.65, #19b037),
+		to(#2f8a21));
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	border: 1px solid #000000;
+	-moz-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 5px rgba(16,161,96,0.6);
+	-webkit-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+	box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 5px rgba(16,161,96,0.6);
+	text-shadow:
+		0px -1px 3px rgba(255,255,255,0.8),
+		0px 1px 0px rgba(255,255,255,0.3);
+}
+
+.list_ideal {display:flex;justify-content:space-evenly}
+.list_ideal li {
+  width:35%;
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #fff;
+  justify-content:space-between;
+}
+.list_ideal li a {display:block;width:100%}
+.list_ideal li a[hover="true"] img{
+  -webkit-filter: grayscale(100%);
+  filter: gray;
+}
+.list_ideal li a.final img{
+  -webkit-filter: unset;
+  filter: unset;
+}
+.list_ideal li span {display:block;overflow:hidden;width:100%;border:1px solid #ddd;border-radius:10px;}
+.list_ideal li span img {width:100%;vertical-align:top}
+.list_ideal li strong {display:block;text-align:center}
+.list_ideal li a[hover="true"] strong {text-decoration:underline}
+
+
+#history .tit {margin:10px 0;font-size:18px;font-weight:bold;text-align:center}
+#history #modal {width:100%; height:100%}
+#history .history_box .round {width: 100%;margin-bottom:10px;text-align:center}
+#history .history_box .round:last-child {margin-bottom: 0}
+#history .history_box .round img {
+  width:15%;
+}
+#history .history_box .round img:nth-child(even) {
+  margin-right:2%
+}
+#history .history_box .round img:last-child {margin-right: 0}
+#history img.dim {
+  -webkit-filter: grayscale(100%);
+  filter: gray;
+}
+/* footer */
+footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
+/* media */
+@media (max-width:525px){
+  .list_ideal {display:block}
+  .list_ideal li {width:90%;margin:15px auto 0}
+}

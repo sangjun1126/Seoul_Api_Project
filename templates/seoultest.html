@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Expires" content="-1" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <style>
+      .button-container {
+        position: absolute;
+        top: 5px;
+        right: 50px;
+        padding: 15px;
+        display: flex;
+        flex-direction: row; /* 수정: 버튼을 가로로 배치하도록 변경 */
+        z-index: 1;
+      }
+
+      .button-container button {
+        margin-right: 10px; /* 수정: 버튼 간의 간격을 조절 */
+        background-color: #6495ed; /* 수정: 파란색 배경색 */
+        color: #fff; /* 수정: 흰색 글자색 */
+        padding: 15px 20px; /* 수정: 버튼 크기 조절 */
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .button-container button:last-child {
+        margin-right: 0; /* 마지막 버튼은 오른쪽 여백 없애기 */
+      }
+    </style>
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-1.10.2.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3b9fc711131ecabb713a7fc9de962624"
+    ></script>
+  </head>
+  <body>
+    <div
+      class="map-wrap"
+      style="position: absolute; left: 0; top: 0; right: 0; bottom: 60px"
+    >
+      <div id="map" style="width: 100%; height: 100%"></div>
+    </div>
+    <div
+      class="map-wrap"
+      style="position: absolute; left: 0; top: 0; right: 0; bottom: 60px"
+    >
+      <div id="map" style="width: 70%; height: 100%"></div>
+    </div>
+    <div class="button-container">
+      <button id="goBack" class="back-button">뒤로 가기</button>
+      <button id="mainBack" class="main-button">홈으로</button>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("goBack")
+          .addEventListener("click", function () {
+            goBack();
+          });
+
+        document
+          .getElementById("mainBack")
+          .addEventListener("click", function () {
+            mainBack();
+          });
+      });
+
+      function goBack() {
+        window.history.back();
+      }
+
+      function mainBack() {
+        window.location.href = "/";
+      }
+    </script>
+    <script>
+      var mapContainer = document.getElementById("map"); // 지도를 표시할 div
+      var mapOption = {
+        center: new kakao.maps.LatLng(37.5665, 126.978), // 지도의 중심좌표: 서울
+        level: 8, // 지도의 확대 레벨
+      };
+
+      var map = new kakao.maps.Map(mapContainer, mapOption);
+      customOverlay = new kakao.maps.CustomOverlay({});
+
+      $.getJSON("/static/json/test_seoul.geojson", function (geojson) {
+        var data = geojson.features;
+        var coordinates = [];
+        var name = "";
+        var link = ""; // 폴리곤에 연결된 링크 정보
+
+        $.each(data, function (index, val) {
+          coordinates = val.geometry.coordinates;
+          name = val.properties.SIG_KOR_NM;
+          link =
+            "https://www.google.com/search?q=%EC%84%9C%EC%9A%B8+" +
+            name +
+            "+관광명소&tbm=isch&ved=2ahUKEwik37uS1OWCAxWFQN4KHWdmBdwQ2-cCegQIABAA&oq=서울+" +
+            name +
+            "+관광명소&gs_lcp=CgNpbWcQAzoHCAAQgAQQGFDnBViuC2DPDGgAcAB4AIABvQGIAbcFkgEDMi40mAEAoAEBqgELZ3dzLXdpei1pbWfAAQE&sclient=img&ei=ulFlZaSaCoWB-QbnzJXgDQ&bih=919&biw=1920"; // 이 부분을 추가하여 link 변수 설정
+          displayMap(coordinates, name, link);
+        });
+      });
+
+      var polygons = [];
+
+      function displayMap(coordinates, name, link) {
+        var path = [];
+        var points = [];
+        var pathArr = [];
+        $.each(coordinates[0], function (index, coordinate) {
+          var point = new Object();
+          point.x = coordinate[1];
+          point.y = coordinate[0];
+          points.push(point);
+          path.push(new daum.maps.LatLng(coordinate[1], coordinate[0]));
+          pathArr.push([coordinate[1], coordinate[0]]);
+        });
+
+        var polygon = new daum.maps.Polygon({
+          map: map, // 다각형을 표시할 지도 객체
+          path: path,
+          strokeWeight: 2,
+          strokeColor: "#004c80",
+          strokeOpacity: 0.8,
+          fillColor: "#fff",
+          fillOpacity: 0.7,
+        });
+
+        polygons.push(polygon);
+        console.log(name);
+        overlaySet(name, points);
+
+        kakao.maps.event.addListener(
+          polygon,
+          "mouseover",
+          (function (name) {
+            return function (mouseEvent) {
+              polygon.setOptions({
+                fillColor: "#09f",
+              });
+              var content = '<div class="overlaybox">';
+              content += ' <div class="boxtitle">' + name + "</div> ";
+              content += "</div>";
+              var position = getPolygonCenter(polygon);
+              console.log(points.length);
+            };
+          })(name)
+        );
+
+        // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 색을 변경하고, 커스텀오버레이를 변경한다.
+        kakao.maps.event.addListener(polygon, "mouseout", function () {
+          polygon.setOptions({
+            fillColor: "#fff",
+          });
+          customOverlay.setMap(map);
+          // customOverlay.setMap(null);
+        });
+
+        kakao.maps.event.addListener(polygon, "click", function () {
+          window.location.href = link;
+        });
+      }
+
+      //centroid 알고리즘 (폴리곤 중심좌표 구하기 위함)
+      function centerMap(points) {
+        var i, j, len, p1, p2, f, area, x, y;
+
+        area = x = y = 0;
+
+        for (i = 0, len = points.length, j = len - 1; i < len; j = i++) {
+          p1 = points[i];
+          p2 = points[j];
+
+          f = p1.y * p2.x - p2.y * p1.x;
+          x += (p1.x + p2.x) * f;
+          y += (p1.y + p2.y) * f;
+          area += f * 3;
+        }
+        return new kakao.maps.LatLng(x / area, y / area);
+      }
+
+      function overlaySet(name, points) {
+        var content =
+          '<div class="area" style="font-weight:bold; font-size:17px;">' + // 지역 이름 폰트 크기
+          name +
+          "</div>";
+
+        // 커스텀 오버레이가 표시될 위치입니다
+        var position = centerMap(points);
+
+        // 커스텀 오버레이를 생성합니다
+        customOverlay = new kakao.maps.CustomOverlay({
+          position: position,
+          content: content,
+          xAnchor: 0.3,
+          yAnchor: 0.91,
+        });
+
+        // 커스텀 오버레이를 지도에 표시합니다
+        customOverlay.setMap(map);
+      }
+
+      // 폴리곤의 중앙 좌표를 계산하는 함수
+      function getPolygonCenter(polygon) {
+        var len = polygon.getPath().length;
+        var x = 0;
+        var y = 0;
+
+        polygon.getPath().forEach(function (point) {
+          x += point.La;
+          y += point.Ma;
+        });
+
+        return new kakao.maps.LatLng(y / len, x / len);
+      }
+
+      function disableMapInteractions() {
+        // 마우스 드래그로 지도 이동 가능여부를 설정합니다
+        map.setDraggable(false);
+
+        // 마우스 휠로 지도 확대, 축소 가능여부를 설정합니다
+        map.setZoomable(false);
+
+        // 지도의 클릭 이벤트를 차단합니다
+        // kakao.maps.event.addListener(map, "click", function (e) {
+        //   e.preventDefault();
+        // });
+
+        kakao.maps.event.addListener(map, "dblclick", function (e) {
+          e.preventDefault();
+        });
+      }
+      disableMapInteractions();
+      function goBack() {
+        window.history.back(); // 뒤로 가는 기능 수행
+      }
+
+      function mainBack() {
+        window.location.href = "/";
+      }
+
+      function board() {
+        window.location.href = "/test";
+      }
+    </script>
+  </body>
+</html>

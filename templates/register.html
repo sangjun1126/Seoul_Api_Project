@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        .main-homepage-link {
+            color: #fff; /* Text color */
+            background-color: #007bff; /* Background color */
+            padding: 10px 20px; /* Padding around the text */
+            text-decoration: none; /* Remove underline */
+            border-radius: 5px; /* Add rounded corners */
+            display: inline-block; /* Make it a block element */
+        }
+
+        .main-homepage-link:hover {
+            background-color: #0056b3; /* Change background color on hover */
+        }
+    </style>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
+
+    <!-- Title Page-->
+    <title>Au Register Forms by Colorlib</title>
+
+    <!-- Icons font CSS-->
+    <link href="/static/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="/static/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link href="/static/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="/static/vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+    <link href="/static/css/registerstyle.css" rel="stylesheet" media="all">
+
+</head>
+</script>
+<body>
+    <form action="/register" class="form" id="form1" method="post">
+        <div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
+            <div class="wrapper wrapper--w680">
+                <div class="card card-4">
+                    <div class="card-body">
+                        <h2 class="title">회원가입
+                         {% if error %}
+                            <p style="color: red;">{{ error }}</p>
+                        {% endif %}
+                        </h2>
+                        <form method="POST" action="{{ url_for('j_member_post') }}">
+                            <div class="row row-space">
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">이름</label>
+                                        <input class="input--style-4" type="text" name="name">
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">성별</label>
+                                        <div class="p-t-10">
+                                            <label class="radio-container m-r-45">남자
+                                                <input type="radio"value="남자" checked="checked" name="gender">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                            <label class="radio-container">여자
+                                                <input type="radio"value="여자" name="gender">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-space">
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">이메일(회원ID)</label>
+                                        <input class="input--style-4" type="email" name="email" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">전화번호</label>
+                                        <input class="input--style-4" type="text" name="phone" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-space">
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">비밀번호</label>
+                                        <input class="input--style-4" type="password" name="password" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="input-group">
+                                        <label class="label">생일</label>
+                                        <div class="input-group-icon">
+                                            <input class="input--style-4 js-datepicker" type="text" name="birthday" autocomplete="off">
+                                            <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-space">
+                                <div class="col-2">
+                            <div class="p-t-20">
+                                <button class="btn btn--radius-2 btn--blue" type="submit">회원가입 완료</button>
+                            </div>
+                                 </div>
+                                <div class="col-2">
+                                    <div class="p-t-20">
+
+
+                                        </div>
+                                </div>
+                            </div>
+
+                            <div class="p-t-20">
+                                <a href="http://127.0.0.1:5000/"class="main-homepage-link">메인 화면</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+    // ... (your existing JavaScript functions) ...
+
+    function goToMainHomepage() {
+        // Redirect to the main homepage
+        window.location.href = '/';
+    }
+</script>
+    <!-- Jquery JS-->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+    <!-- Vendor JS-->
+    <script src="/static/vendor/select2/select2.min.js"></script>
+    <script src="/static/vendor/datepicker/moment.min.js"></script>
+    <script src="/static/vendor/datepicker/daterangepicker.js"></script>
+
+    <!-- Main JS-->
+    <script src="/static/js/global.js"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>
+<!-- end document-->

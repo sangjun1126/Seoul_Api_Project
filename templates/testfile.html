@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서울시 구 별 인구수</title>
+    <style>
+        #chartdiv {
+            width: 100%;
+            height: 100vh;
+            display: none; /* 그래프 숨기기 */
+        }
+        .header {
+            text-align: center;
+        }
+    </style>
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+</head>
+<body>
+    <div class="main">
+        <h1>안녕하세요 잘 들어갑니다</h1>
+        <h2>서울시 근황 소개 드가자</h2>
+        <h3>진짜 드가자</h3>
+        <h4>6시 퇴근 드가자</h4>
+    </div>
+
+    <div>
+        <input id="toggle-button" value="서울시 정보 더 보기" onclick="toggleContent()" type="button" style="width: 100%; padding: 10px; font-size: 16px; color: white; background-color: #3498db; border: none; border-radius: 5px;" />
+        <div id="content" style="display: none;"> 
+            <div class="header">
+                <h1>서울시 구 별 인구수</h1>
+            </div>
+            <div id="chartdiv"></div> <!-- 그래프가 여기로 이동 -->
+        </div>
+    </div>
+
+    <script>
+        function toggleContent() {
+            var content = document.getElementById('content');
+            var button = document.getElementById('toggle-button');
+            var chartDiv = document.getElementById('chartdiv');
+
+            if (content.style.display !== 'none') {
+                content.style.display = 'none';
+                button.value = '서울시 정보 더 보기';
+                chartDiv.style.display = 'none'; // 그래프 숨기기
+            } else {
+                content.style.display = 'block';
+                button.value = '숨기기';
+                chartDiv.style.display = 'block'; // 그래프 보이기
+                renderChart(); // 그래프 렌더링 함수 호출
+            }
+        }
+        am5.ready(function() {
+                        
+                        // Create root element
+                        // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+                        var root = am5.Root.new("chartdiv");
+                        
+                        
+                        var myTheme = am5.Theme.new(root);
+                        
+                        myTheme.rule("Grid", ["base"]).setAll({
+                          strokeOpacity: 0.1
+                        });
+                        
+                        
+                        // Set themes
+                        // https://www.amcharts.com/docs/v5/concepts/themes/
+                        root.setThemes([
+                          am5themes_Animated.new(root),
+                          myTheme
+                        ]);
+                        
+                        
+                        // Create chart
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/
+                        var chart = root.container.children.push(
+                          am5xy.XYChart.new(root, {
+                            panX: false,
+                            panY: false,
+                            wheelX: "none",
+                            wheelY: "none"
+                          })
+                        );
+                        
+                        
+                        // Create axes
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+                        var yRenderer = am5xy.AxisRendererY.new(root, { minGridDistance: 30 });
+                        yRenderer.grid.template.set("location", 1);
+                        
+                        var yAxis = chart.yAxes.push(
+                          am5xy.CategoryAxis.new(root, {
+                            maxDeviation: 0,
+                            categoryField: "country",
+                            renderer: yRenderer
+                          })
+                        );
+                        
+                        var xAxis = chart.xAxes.push(
+                          am5xy.ValueAxis.new(root, {
+                            maxDeviation: 0,
+                            min: 0,
+                            renderer: am5xy.AxisRendererX.new(root, {
+                              visible: true,
+                              strokeOpacity: 0.1
+                            })
+                          })
+                        );
+                        
+                        
+                        // Create series
+                        // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+                        var series = chart.series.push(
+                          am5xy.ColumnSeries.new(root, {
+                            name: "Series 1",
+                            xAxis: xAxis,
+                            yAxis: yAxis,
+                            valueXField: "value",
+                            sequencedInterpolation: true,
+                            categoryYField: "country"
+                          })
+                        );
+                        
+                        var columnTemplate = series.columns.template;
+                        
+                        columnTemplate.setAll({
+                          draggable: true,
+                          cursorOverStyle: "pointer",
+                          tooltipText: "drag to rearrange",
+                          cornerRadiusBR: 10,
+                          cornerRadiusTR: 10,
+                          strokeOpacity: 0
+                        });
+                        columnTemplate.adapters.add("fill", (fill, target) => {
+                          return chart.get("colors").getIndex(series.columns.indexOf(target));
+                        });
+                        
+                        columnTemplate.adapters.add("stroke", (stroke, target) => {
+                          return chart.get("colors").getIndex(series.columns.indexOf(target));
+                        });
+                        
+                        columnTemplate.events.on("dragstop", () => {
+                          sortCategoryAxis();
+                        });
+                        
+                        // Get series item by category
+                        function getSeriesItem(category) {
+                          for (var i = 0; i < series.dataItems.length; i++) {
+                            var dataItem = series.dataItems[i];
+                            if (dataItem.get("categoryY") == category) {
+                              return dataItem;
+                            }
+                          }
+                        }
+                        
+                        
+                        // Axis sorting
+                        function sortCategoryAxis() {
+                          // Sort by value
+                          series.dataItems.sort(function(x, y) {
+                            return y.get("graphics").y() - x.get("graphics").y();
+                          });
+                        
+                          var easing = am5.ease.out(am5.ease.cubic);
+                        
+                          // Go through each axis item
+                          am5.array.each(yAxis.dataItems, function(dataItem) {
+                            // get corresponding series item
+                            var seriesDataItem = getSeriesItem(dataItem.get("category"));
+                        
+                            if (seriesDataItem) {
+                              // get index of series data item
+                              var index = series.dataItems.indexOf(seriesDataItem);
+                        
+                              var column = seriesDataItem.get("graphics");
+                        
+                              // position after sorting
+                              var fy =
+                                yRenderer.positionToCoordinate(yAxis.indexToPosition(index)) -
+                                column.height() / 2;
+                        
+                              // set index to be the same as series data item index
+                              if (index != dataItem.get("index")) {
+                                dataItem.set("index", index);
+                        
+                                // current position
+                                var x = column.x();
+                                var y = column.y();
+                        
+                                column.set("dy", -(fy - y));
+                                column.set("dx", x);
+                        
+                                column.animate({ key: "dy", to: 0, duration: 600, easing: easing });
+                                column.animate({ key: "dx", to: 0, duration: 600, easing: easing });
+                              } else {
+                                column.animate({ key: "y", to: fy, duration: 600, easing: easing });
+                                column.animate({ key: "x", to: 0, duration: 600, easing: easing });
+                              }
+                            }
+                          });
+                        
+                          // Sort axis items by index.
+                          // This changes the order instantly, but as dx and dy is set and animated,
+                          // they keep in the same places and then animate to true positions.
+                          yAxis.dataItems.sort(function(x, y) {
+                            return x.get("index") - y.get("index");
+                          });
+                        }
+                        
+                        // Set data
+                        var data = [{
+                          country: "강동구",
+                          value: 432168
+                        }, {
+                          country: "송파구",
+                          value: 667144
+                        }, {
+                          country: "강남구",
+                          value: 545809
+                        }, {
+                          country: "서초구",
+                          value: 439030
+                        }, {
+                          country: "관악구",
+                          value: 503900
+                        },{
+                          country: "동작구",
+                          value: 395095
+                        },{
+                          country: "영등포구",
+                          value: 368733
+                        },{
+                          country: "금천구",
+                          value: 233145
+                        },{
+                          country: "구로구",
+                          value: 406888
+                        },{
+                          country: "강서구",
+                          value: 599501
+                        },{
+                          country: "양천구",
+                          value: 466723
+                        },{
+                          country: "마포구",
+                          value: 374579
+                        },{
+                          country: "서대문구",
+                          value: 310821
+                        },{
+                          country: "은평구",
+                          value: 484021
+                        },{
+                          country: "노원구",
+                          value: 548371
+                        },{
+                          country: "도봉구",
+                          value: 341638
+                        },{
+                          country: "강북구",
+                          value: 321757
+                        },{
+                          country: "성북구",
+                          value: 439292
+                        },{
+                          country: "중랑구",
+                          value: 405118
+                        },{
+                          country: "동대문구",
+                          value: 349917
+                        },{
+                          country: "광진구",
+                          value: 355352
+                        },{
+                          country: "성동구",
+                          value: 308519
+                        },{
+                          country: "용산구",
+                          value: 229545
+                        },{
+                          country: "중구",
+                          value: 125941
+                        },{
+                          country: "종로구",
+                          value: 153531
+                        },
+                    ];
+                        
+                        yAxis.data.setAll(data);
+                        series.data.setAll(data);
+                        
+                        
+                        // Make stuff animate on load
+                        // https://www.amcharts.com/docs/v5/concepts/animations/
+                        series.appear(1000);
+                        chart.appear(1000, 100);
+                        
+                        }); // end am5.ready()
+        </script>
+    </body>
+</html>
