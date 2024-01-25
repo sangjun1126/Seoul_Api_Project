@@ -17,3 +17,7 @@
 * 웹 스크래핑(맛집 정보, 관광지 전체 css까지)
 * 서울시 날씨 예보 정보 웹페이지 구현
 * 관광지 게임 요소 개발
+
+### 발표 PPT
+
+* [서울 관광지 API 프로젝트.pptx](https://github.com/sangjun1126/Seoul_Api_Project/files/14048306/API.pptx)
